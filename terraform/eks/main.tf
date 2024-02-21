@@ -15,7 +15,7 @@ resource "aws_eks_cluster" "k8s-cluster" {
     role_arn = aws_iam_role.eks-iam-node.arn
 
     vpc_config {
-        subnet_ids         = ["subnet-0e5b933658deb9bdd", "subnet-0375b5fa4575e0964"]
+        subnet_ids         = data.aws_subnets.default.ids
         security_group_ids = [aws_security_group.eks-cluster-security-group.id]
     }
 
@@ -65,7 +65,7 @@ resource "null_resource" "output" {
     }
 
     provisioner "local-exec" {
-        command = "echo '${data.template_file.kube_config.rendered}' > kubeconfig.aws"
+        command = "echo '${data.template_file.kube_config.rendered}' > eks-sandbox.kubeconfig"
     }
 }
 

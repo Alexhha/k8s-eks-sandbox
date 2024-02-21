@@ -1,7 +1,7 @@
 resource "aws_eks_node_group" "linux_amd64" {
     count           = var.amd64_enabled ? 1 : 0
     cluster_name    = aws_eks_cluster.k8s-cluster.id
-    subnet_ids      = ["subnet-0e5b933658deb9bdd", "subnet-0375b5fa4575e0964"]
+    subnet_ids      = data.aws_subnets.default.ids
     node_role_arn   = aws_iam_role.eks-iam-nodegroup.arn
     node_group_name = "linux-amd64-${var.eks_node_group_distro}-${random_id.aws-prefix.hex}"
     capacity_type   = var.capacity_type
@@ -29,7 +29,7 @@ resource "aws_eks_node_group" "linux_amd64" {
 resource "aws_eks_node_group" "linux_arm64" {
     count           = var.arm64_enabled ? 1 : 0
     cluster_name    = aws_eks_cluster.k8s-cluster.id
-    subnet_ids      = ["subnet-0e5b933658deb9bdd", "subnet-0375b5fa4575e0964"]
+    subnet_ids      = data.aws_subnets.default.ids
     node_role_arn   = aws_iam_role.eks-iam-nodegroup.arn
     node_group_name = "linux-arm64-${var.eks_node_group_distro}-${random_id.aws-prefix.hex}"
     capacity_type   = var.capacity_type
@@ -57,7 +57,7 @@ resource "aws_eks_node_group" "linux_arm64" {
 resource "aws_eks_node_group" "windows_amd64" {
     count           = var.win64_enabled ? 1 : 0
     cluster_name    = aws_eks_cluster.k8s-cluster.id
-    subnet_ids      = ["subnet-0e5b933658deb9bdd", "subnet-0375b5fa4575e0964"]
+    subnet_ids      = data.aws_subnets.default.ids
     node_role_arn   = aws_iam_role.eks-iam-nodegroup.arn
     node_group_name = "windows-64-${random_id.aws-prefix.hex}"
     ami_type        = "WINDOWS_CORE_2019_x86_64"
