@@ -64,6 +64,7 @@ variable "whitelist_ips" {
 }
 
 
+// [al2|al2023|ubuntu]
 variable "eks_node_group_distro" {
     type    = string
     default = "al2"
@@ -73,6 +74,7 @@ variable "ami_distro_owner" {
     type    = map
     default = {
         "al2"    = "602401143452"
+        "al2023" = "602401143452"
         "ubuntu" = "099720109477"
     }
 }
