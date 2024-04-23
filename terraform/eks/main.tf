@@ -61,11 +61,21 @@ resource "aws_security_group" "eks-cluster-security-group" {
 
 resource "null_resource" "output" {
     triggers = {
-        template_rendered = "${data.template_file.kube_config.rendered}"
+        eks_region   = var.region
+        eks_name     = aws_eks_cluster.k8s-cluster.id
+        eks_endpoint = aws_eks_cluster.k8s-cluster.endpoint
+        eks_root_ca  = aws_eks_cluster.k8s-cluster.certificate_authority.0.data
     }
 
     provisioner "local-exec" {
-        command = "echo '${data.template_file.kube_config.rendered}' > eks-sandbox.kubeconfig"
+        command = <<-EOT
+            echo '${templatefile("${path.module}/templates/kube.config", {
+            eks_name     = aws_eks_cluster.k8s-cluster.id
+            eks_endpoint = aws_eks_cluster.k8s-cluster.endpoint
+            eks_root_ca  = aws_eks_cluster.k8s-cluster.certificate_authority.0.data
+            eks_region   = var.region
+        })}' > eks-sandbox.kubeconfig
+        EOT
     }
 }
 

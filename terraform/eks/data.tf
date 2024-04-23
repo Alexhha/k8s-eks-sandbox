@@ -26,20 +26,6 @@ data "aws_eks_cluster_auth" "k8s-auth" {
 }
 
 
-data "template_file" "kube_config" {
-    depends_on = [aws_eks_cluster.k8s-cluster]
-    template = templatefile(
-        "${path.module}/templates/kube.config",
-        {
-            eks_name     = "${aws_eks_cluster.k8s-cluster.id}"
-            eks_endpoint = "${aws_eks_cluster.k8s-cluster.endpoint}"
-            eks_root_ca  = "${aws_eks_cluster.k8s-cluster.certificate_authority.0.data}"
-            eks_region   = "${var.region}"
-        }
-    )
-}
-
-
 data "aws_ami" "eks_node_group_image_amd64" {
     most_recent = true
     owners      = [var.ami_distro_owner[var.eks_node_group_distro]]

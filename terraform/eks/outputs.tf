@@ -30,13 +30,6 @@ output "node_group_id_win64" {
     value = try(aws_eks_node_group.windows_amd64[0].id, "N/A")
 }
 
-output "node_group_instance" {
-    value = {
-        for i in range(length(data.aws_instances.node_group.ids)) : data.aws_instances.node_group.ids[i]
-            => data.aws_instances.node_group.public_ips[i]
-    }
-}
-
 output "p0" {
     value = "-----------------------------------------------------------------"
 }
